@@ -1,8 +1,3 @@
-# IDE
-*.idea
-idea/
-.vscode
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -16,6 +11,7 @@ __pycache__/
 build/
 develop-eggs/
 dist/
+downloads/
 eggs/
 .eggs/
 lib/
@@ -51,7 +47,6 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-*.py,cover
 .hypothesis/
 .pytest_cache/
 
@@ -88,12 +83,10 @@ ipython_config.py
 # pyenv
 .python-version
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
-
 # Celery stuff
-celerybeat-schedule
 celerybeat.pid
+# celery beat schedule file
+celerybeat-schedule
 
 # SageMath parsed files
 *.sage.py
@@ -124,6 +117,25 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Azure Functions artifacts
+bin
+obj
+appsettings.json
+local.settings.json
+
+# Azurite artifacts
+__blobstorage__
+__queuestorage__
+__azurite_db*__.json
+.python_packages
+
+# IDE
+*.idea
+idea/
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
 
 # misc
 .DS_Store

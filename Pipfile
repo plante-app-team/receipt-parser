@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 azure-core = "*"
 azure-cosmos = "*"
+azure-functions = "*"
+jinja2 = "*"
 
 [dev-packages]
 black = "*"
