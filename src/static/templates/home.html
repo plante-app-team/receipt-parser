@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Submit your receipt URL</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 1.25rem;
+            background-color: #f0f0f0;
+            margin: 0 auto; /* Center the body */
+            max-width: 40rem; /* Limit the width to 1200px */
+        }
+
+        @media screen and (min-width: 40rem) {
+            body {
+                width: 40rem;
+            }
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .message-area {
+            margin-bottom: 1.25rem;
+            padding: 0.75rem;
+            border: 1px solid #f00;
+            color: #f00;
+        }
+
+        .alert {
+            border-color: #f00;
+            color: #f00;
+        }
+
+        .info {
+            border-color: #007BFF;
+            color: #007BFF;
+        }
+
+        #url-form {
+            margin-bottom: 1.25rem;
+        }
+
+        #url-form label {
+            display: block;
+        }
+
+        #url-form input {
+            padding: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 0.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        #url-form #submit {
+            padding: 0.5rem;
+            background-color: mediumseagreen;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+async function postFormData(url, data) {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: data
+    });
+
+    const body = await response.json();
+
+    return {
+      status: response.status,
+      message: body.message,
+      data: body.data
+    };
+}
+
+  function ReceiptParser() {
+    const [url, setUrl] = React.useState('');
+    const [message, setMessage] = React.useState('');
+    const [messageType, setMessageType] = React.useState('info');
+
+    async function handleSubmit(event) {
+      event.preventDefault();
+
+      const formData = new FormData();
+      formData.append('url', url);
+      formData.append('user_id', '1');
+      const resp = await postFormData('parse-from-url', formData);
+      setMessage(resp.message);
+      setMessageType(resp.status >= 200  && resp.status < 300 ? 'info' : 'alert');
+    }
+
+    return (
+      <>
+        <h2>Submit your receipt URL</h2>
+        <div className={`message-area ${messageType}`} hidden={!message}>
+          {message}
+        </div>
+        <form id="url-form" onSubmit={handleSubmit}>
+          <label>URL
+            <input type="url" id="url" name="url" value={url}
+                   onChange={e => setUrl(e.target.value)} required
+            />
+          </label><br/>
+          <input type="hidden" name="user_id" value="1"/>
+          <input type="submit" id="submit" value="Submit"/>
+        </form>
+      </>
+    );
+  }
+
+  const container = document.getElementById('root');
+  const root = ReactDOM.createRoot(container);
+  root.render(<ReceiptParser/>);
+</script>
+</body>
+</html>
