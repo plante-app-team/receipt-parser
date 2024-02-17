@@ -7,17 +7,23 @@
     <!-- Don't use this in production: -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
+        html {
+            font-size: 40px;
+        }
         body {
             font-family: Arial, sans-serif;
-            padding: 1.25rem;
             background-color: #f0f0f0;
-            margin: 0 auto; /* Center the body */
-            max-width: 40rem; /* Limit the width to 1200px */
+            max-width: 100%;
         }
 
-        @media screen and (min-width: 40rem) {
+        @media (min-width: 992px) {
+            html {
+                font-size: 16px;
+            }
             body {
-                width: 40rem;
+                max-width: 720px;
+                padding: 1.25rem;
+                margin: 0 auto;  /* Center the body */
             }
         }
 
@@ -42,28 +48,30 @@
             color: #007BFF;
         }
 
-        #url-form {
-            margin-bottom: 1.25rem;
+        form {
+            margin: 0.75rem 0;
         }
 
-        #url-form label {
+       form label {
             display: block;
         }
 
-        #url-form input {
-            padding: 5px;
+        form input {
+            padding: 0.5rem;
             width: 100%;
             box-sizing: border-box;
             margin-top: 0.25rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
         }
 
-        #url-form #submit {
-            padding: 0.5rem;
+        form #submit {
+            padding: 0.75rem;
             background-color: mediumseagreen;
             color: #fff;
             border: none;
             cursor: pointer;
+            font-size: 1.25rem;
         }
     </style>
 </head>
@@ -108,7 +116,7 @@ async function postFormData(url, data) {
         <div className={`message-area ${messageType}`} hidden={!message}>
           {message}
         </div>
-        <form id="url-form" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <label>URL
             <input type="url" id="url" name="url" value={url}
                    onChange={e => setUrl(e.target.value)} required
