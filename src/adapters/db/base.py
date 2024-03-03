@@ -1,20 +1,29 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Self, List
 
-from src.schemas.common import EnvType
+from src.schemas.common import EnvType, TableName
 
 
 class BaseDBAdapter(ABC):
     @abstractmethod
-    def __init__(self, env: EnvType):
+    def __init__(self, env: EnvType, logger):
         self.env = env
+        self.logger = logger
 
     @abstractmethod
-    def use_db(self, **kwargs) -> Self:
+    def use_db(self, db_name: str) -> Self:
+        pass
+
+    @abstractmethod
+    def use_table(self, table_name: TableName) -> Self:
         pass
 
     @abstractmethod
     def create_one(self, data: Dict[str, Any]) -> str:
+        pass
+
+    @abstractmethod
+    def create_or_update_one(self, data: Dict[str, Any]) -> bool:
         pass
 
     @abstractmethod
@@ -40,11 +49,11 @@ class BaseDBAdapter(ABC):
         pass
 
     @abstractmethod
-    def create_table(self, **kwargs) -> Self:
+    def create_table(self, table_name: TableName, **kwargs) -> Self:
         pass
 
     @abstractmethod
-    def drop_table(self, **kwargs) -> None:
+    def drop_table(self, table_name: TableName) -> None:
         pass
 
     @abstractmethod

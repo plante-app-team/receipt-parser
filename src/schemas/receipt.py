@@ -1,38 +1,26 @@
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from datetime import datetime
 from typing import List
+from uuid import UUID
 
-from src.schemas.purchase import Purchase
+from src.schemas.common import CountryCode, CurrencyCode
+from src.schemas.purchased_item import PurchasedItem
+from src.schemas.schema_base import SchemaBase
 
 
 @dataclass
-class Receipt:
-    user_id: int
+class Receipt(SchemaBase):
+    id: str
+    date: datetime
+    user_id: UUID
     company_id: str
     company_name: str
-    country_code: str
+    country_code: CountryCode
     shop_address: str
     cash_register_id: str
-    receipt_id: int
-    currency_code: str
-    date: datetime
+    key: int | str
+    currency_code: CurrencyCode
     total_amount: float
-    purchases: List[Purchase]
-
-    @property
-    def id(self) -> str:
-        return f"{self.cash_register_id}_{self.receipt_id}".lower()
-
-    @property
-    def receipt_url(self) -> str:
-        return (
-            f"https://mev.sfs.md/receipt-verifier/{self.cash_register_id}/"
-            f"{self.total_amount:.2f}/{self.receipt_id}/{self.date:%Y-%m-%d}"
-        )
-
-    def to_dict(self):
-        receipt = asdict(self)
-        receipt["id"] = self.id
-        receipt["date"] = self.date.isoformat()
-        receipt["receipt_url"] = self.receipt_url
-        return receipt
+    purchases: List[PurchasedItem]
+    receipt_url: str
+    shop_id: UUID | None = None

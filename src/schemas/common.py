@@ -1,4 +1,4 @@
-from enum import StrEnum
+from enum import StrEnum, Enum
 
 
 class EnvType(StrEnum):
@@ -10,12 +10,45 @@ class EnvType(StrEnum):
 class TableName(StrEnum):
     RECEIPT = "receipt"
     PURCHASE = "purchase"
-    PRODUCT_BARCODE = "product_barcode"
-    SHOP_OSM = "shop_osm"
+    PRODUCT = "product"
+    SHOP = "shop"
+    SHOP_ITEM = "shop_item"
 
 
 class TablePartitionKey(StrEnum):
     RECEIPT = "user_id"
     PURCHASE = "shop_id"
-    PRODUCT_BARCODE = "shop_id"
-    SHOP_OSM = "country_code"
+    PRODUCT = "country_code"
+    SHOP = "country_code"
+    SHOP_ITEM = "shop_id"
+
+
+class CountryCode(StrEnum):
+    MOLDOVA = "md"
+
+
+# https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml
+class CurrencyCode(StrEnum):
+    MOLDOVAN_LEU = "mdl"
+
+
+class OsmType(StrEnum):
+    NODE = "node"
+    WAY = "way"
+    RELATION = "relation"
+
+
+class ReceiptProvider(StrEnum):
+    SFS_MD = "sfs_md"
+
+
+class ItemBarcodeStatus(StrEnum):
+    PENDING = "pending"  # barcode is not yet added
+    MISSING = "missing"  # item does not have international barcode
+    IRRELEVANT = "irrelevant"  # item is not relevant for the app users (e.g. car tyres)
+    ADDED = "added"  # barcode is added by the user
+
+
+class Operator(Enum):
+    EQ = "eq"
+    NE = "ne"

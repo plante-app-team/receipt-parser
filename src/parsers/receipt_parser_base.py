@@ -1,17 +1,25 @@
 from abc import ABC, abstractmethod
+from typing import Self
+from uuid import UUID
 
+from src.schemas.common import CountryCode, CurrencyCode
 from src.schemas.receipt import Receipt
 
 
 class ReceiptParserBase(ABC):
-    def __init__(self, user_id: int):
-        self.user_id = user_id
-        self._data: dict | None = None
+    receipt: Receipt
+    hosts: list[str]
+    country_code: CountryCode
+    currency_code: CurrencyCode
 
     @abstractmethod
-    def parse_html(self, page: str):
+    def parse_html(self, page: str) -> Self:
         pass
 
     @abstractmethod
-    def extract_data(self) -> Receipt:
+    def build_receipt(self, user_id: UUID) -> Self:
+        pass
+
+    @abstractmethod
+    def persist(self) -> Self:
         pass
