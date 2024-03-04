@@ -5,7 +5,7 @@ from uuid import UUID
 from src.schemas.common import CountryCode, CurrencyCode
 from src.schemas.purchased_item import PurchasedItem
 from src.schemas.sfs_md.receipt import SfsMdReceipt
-from src.tests import USER_ID_1, SHOP_ID_1
+from src.tests import USER_ID_1
 
 
 class TestSfsMdReceipt(TestCase):

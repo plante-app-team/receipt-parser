@@ -14,7 +14,7 @@ class TestAddBarcodesHandler(TestCase):
         self.items = [
             {
                 "id": SHOP_ITEM_ID_1,
-                "name": self.name,
+                "purchase_id": self.name + "_1",
                 "status": ItemBarcodeStatus.PENDING.value,
                 "barcode": BARCODE_1,
             }
@@ -40,6 +40,7 @@ class TestAddBarcodesHandler(TestCase):
         invalid_item = {
             "id": SHOP_ITEM_ID_1,
             "name": self.name,
+            "purchase_id": self.name + "_1",
             "status": "INVALID_STATUS",
             "barcode": BARCODE_1,
         }

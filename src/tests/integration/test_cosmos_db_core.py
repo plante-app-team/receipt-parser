@@ -17,7 +17,9 @@ class TestCosmosDBCoreAdapter(TestCase):
         cls.session.create_db()
 
     def setUp(self):
-        self.session.create_table(TableName.RECEIPT, partition_key=TablePartitionKey.RECEIPT)
+        self.session.create_table(
+            TableName.RECEIPT, partition_key=TablePartitionKey.RECEIPT
+        )
 
     def test_create_one(self):
         created_receipt_id = self.session.create_one(LIN_RECEIPT.to_dict())
@@ -25,9 +27,7 @@ class TestCosmosDBCoreAdapter(TestCase):
 
     def test_read_one(self):
         created_receipt_id = self.session.create_one(LIN_RECEIPT.to_dict())
-        receipt: dict = self.session.read_one(
-            created_receipt_id, partition_key=USER_ID_1
-        )
+        receipt: dict = self.session.read_one(created_receipt_id, partition_key=USER_ID_1)
         assert receipt["id"] == LIN_RECEIPT.id
         assert receipt["date"] == LIN_RECEIPT.date.isoformat()
         assert receipt["user_id"] == USER_ID_1

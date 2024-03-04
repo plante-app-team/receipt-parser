@@ -1,7 +1,10 @@
 import os
 
+from src.helpers.logging import set_logger
 from src.schemas.common import EnvType, TableName, TablePartitionKey
 from src.adapters.db.cosmos_db_core import CosmosDBCoreAdapter
+
+logger = set_logger()
 
 
 def migrate_db():
@@ -10,7 +13,6 @@ def migrate_db():
     session.create_db()
     tables = {
         TableName.RECEIPT: TablePartitionKey.RECEIPT,
-        TableName.PRODUCT: TablePartitionKey.PRODUCT,
         TableName.SHOP: TablePartitionKey.SHOP,
         TableName.SHOP_ITEM: TablePartitionKey.SHOP_ITEM,
     }

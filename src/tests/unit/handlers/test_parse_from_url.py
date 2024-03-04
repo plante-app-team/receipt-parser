@@ -47,6 +47,7 @@ class TestParseFromUrlHandler(TestCase):
         mock_get_html.return_value = "<html></html>"
         mock_receipt = MagicMock()
         mock_receipt.to_dict.return_value = {"id": "receipt_id"}
+        # pylint: disable=line-too-long
         mock_parser_instance.parse_html.return_value.build_receipt.return_value.persist.return_value = (
             mock_receipt
         )
