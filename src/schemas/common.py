@@ -9,16 +9,12 @@ class EnvType(StrEnum):
 
 class TableName(StrEnum):
     RECEIPT = "receipt"
-    PURCHASE = "purchase"
-    PRODUCT = "product"
     SHOP = "shop"
     SHOP_ITEM = "shop_item"
 
 
 class TablePartitionKey(StrEnum):
     RECEIPT = "user_id"
-    PURCHASE = "shop_id"
-    PRODUCT = "country_code"
     SHOP = "country_code"
     SHOP_ITEM = "shop_id"
 
