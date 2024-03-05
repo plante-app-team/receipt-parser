@@ -20,20 +20,21 @@ def home(req: HttpRequest) -> HttpResponse:  # pylint: disable=unused-argument
 
 @app.route(route="parse-from-url", methods=["POST"])
 def parse_from_url(req: HttpRequest) -> HttpResponse:
+    logger.info(req.form.to_dict())
     url, user_id = get_form_data(req, "url", "user_id")
-    logger.info("URL: %s", url)
-    logger.info("User ID: %s", user_id)
     return build_response(*parse_from_url_handler(url, user_id, logger))
 
 
 @app.route(route="link-shop", methods=["POST"])
 def link_shop(req: HttpRequest) -> HttpResponse:
+    logger.info(req.form.to_dict())
     url, user_id, receipt_id = get_form_data(req, "url", "user_id", "receipt_id")
     return build_response(*link_shop_handler(url, user_id, receipt_id, logger))
 
 
 @app.route(route="add-barcodes", methods=["POST"])
 def add_barcodes(req: HttpRequest) -> HttpResponse:
+    logger.info(req.form.to_dict())
     shop_id, items = get_form_data(req, "shop_id", "items")
     return build_response(*add_barcodes_handler(shop_id, json.loads(items), logger))
 

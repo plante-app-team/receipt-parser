@@ -1,4 +1,5 @@
 import json
+from http import HTTPStatus
 from uuid import UUID
 
 from src.adapters.db.cosmos_db_core import init_db_session
@@ -6,7 +7,7 @@ from src.schemas.common import TableName, ItemBarcodeStatus
 from src.schemas.shop_item import ShopItem
 
 
-def add_barcodes_handler(shop_id: str, items: list[dict], logger) -> (int, dict):
+def add_barcodes_handler(shop_id: str, items: list[dict], logger) -> (HTTPStatus, dict):
     session = init_db_session(logger)
     session.use_table(TableName.SHOP_ITEM)
 
@@ -26,5 +27,8 @@ def add_barcodes_handler(shop_id: str, items: list[dict], logger) -> (int, dict)
             logger.error(f"Failed to add item: {json.dumps(item)}. Error: {e}")
 
     if invalid_items:
-        return 400, {"msg": "Failed to add some items", "invalid_items": invalid_items}
-    return 200, {"msg": "Purchases successfully added. You can add another URL"}
+        return HTTPStatus.BAD_REQUEST, {
+            "msg": "Failed to add some items",
+            "invalid_items": invalid_items,
+        }
+    return HTTPStatus.OK, {"msg": "Purchases successfully added. You can add another URL"}
