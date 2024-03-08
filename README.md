@@ -6,8 +6,12 @@ We begin by addressing the more accessible digital receipts, before progressing 
 
 
 ## Running the service locally
-1. Create database and required tables `python src/migrations.py` with `EnvType.DEV`
-2. Run `func start`
+1. Install Python 3.11
+2. Install [Pipenv](https://pipenv.pypa.io/en/latest/)
+3. Run `export PIPENV_VENV_IN_PROJECT=1 && pipenv sync --dev`
+4. Run `pipenv shell`
+5. Create database and required tables `python src/migrations.py` with `EnvType.DEV`
+6. Run `func start`
 
 
 ## Deploying to Azure Functions
