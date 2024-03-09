@@ -59,4 +59,7 @@ def link_shop_handler(
     session.use_table(TableName.RECEIPT)
     receipt["shop_id"] = shop["id"]
     session.update_one(receipt_id, receipt)
-    return HTTPStatus.OK, {"msg": "Shop successfully linked", "data": shop}
+    return HTTPStatus.OK, {
+        "msg": "Shop successfully linked",
+        "data": {"shop_id": shop["id"]},
+    }

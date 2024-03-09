@@ -1,10 +1,11 @@
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
+from uuid import UUID
 
 from src.handlers.link_shop import link_shop_handler
 from src.helpers.osm import OSM_HOST
 from src.schemas.common import OsmType
-from src.tests import USER_ID_1
+from src.tests import USER_ID_1, SHOP_ID_1
 
 
 class TestLinkShopHandler(TestCase):
@@ -62,7 +63,7 @@ class TestLinkShopHandler(TestCase):
 
     @patch("src.handlers.link_shop.init_db_session")
     def test_existing_shop_successfully_linked(self, mock_init_db_session):
-        shop_data = {"id": "shop_id"}
+        shop_data = {"id": SHOP_ID_1}
         mock_session = MagicMock()
         mock_init_db_session.return_value = mock_session
         mock_session.read_many.return_value = [shop_data]
@@ -74,7 +75,7 @@ class TestLinkShopHandler(TestCase):
 
         self.assertEqual(status, 200)
         self.assertEqual(body["msg"], "Shop successfully linked")
-        self.assertEqual(body["data"], shop_data)
+        self.assertEqual(body["data"], {"shop_id": SHOP_ID_1})
 
     @patch("src.handlers.link_shop.init_db_session")
     @patch("src.handlers.link_shop.parse_osm_url")
@@ -90,7 +91,7 @@ class TestLinkShopHandler(TestCase):
             "shop_address": "shop_address",
         }
         mock_session.read_many.return_value = []  # shop doesn't exist
-        mock_session.create_one.return_value = "shop_id"
+        mock_session.create_one.return_value = True
         mock_session.update_one.return_value = True
         mock_parse_osm_url.return_value = (OsmType.WAY, "123")
         mock_lookup_osm_object.return_value = {
@@ -105,7 +106,4 @@ class TestLinkShopHandler(TestCase):
         )
 
         self.assertEqual(status, 200)
-        self.assertEqual(
-            body["data"].keys(),
-            {"id", "country_code", "company_id", "shop_address", "osm_object"},
-        )
+        self.assertTrue(UUID(body["data"]["shop_id"]))  # assert it's a valid UUID

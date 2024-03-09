@@ -51,6 +51,13 @@
             color: #007BFF;
         }
 
+        @media (max-width: 992px) {
+            div.text-block {
+                padding: 0 0.5rem;
+                font-size: 0.45rem;
+            }
+        }
+
         form {
             margin: 0.75rem 0;
         }
@@ -87,6 +94,13 @@
         label.radio {
             display: flex;
             align-items: center;
+        }
+
+        @media (max-width: 992px) {
+            input[type="radio"] {
+                width: 1rem;
+                height: 1rem;
+            }
         }
     </style>
 </head>
@@ -133,7 +147,7 @@
     return {success, data: body.data};
   }
 
-  function LinkShopPage({setPage, setMessage, receipt}) {
+  function LinkShopPage({setPage, setMessage, receipt, setReceipt}) {
     async function handleSubmit(event) {
       event.preventDefault();
 
@@ -144,6 +158,8 @@
       );
       if (resp.success) {
         if (receipt.purchases.length > 0) {
+          receipt.shop_id = resp.data.shop_id;
+          setReceipt(receipt);
           setPage(ADD_BARCODES_PAGE);
         } else {
           setMessage({text: NO_PURCHASES_MESSAGE, type: 'alert'});
@@ -154,12 +170,15 @@
 
     return (
       <>
-        <div>
+        <div className="text-block">
           Please,
           <ol>
             <li>do not close this page</li>
             <li>go to <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap website</a></li>
-            <li>find the shop on OpenStreetMap by its address: {receipt.shop_address}</li>
+            <li>
+              find the shop on OpenStreetMap by its address: {receipt.shop_address}
+              <i> (oftentimes it's helpful to use only the street name and number)</i>
+            </li>
             <li>open the shop page</li>
             <li>copy the URL of the page
               (<a
@@ -251,27 +270,33 @@
         <form onSubmit={handleSubmit}>
           {shopItems.map((item, index) => (
             <div key={index}>
+              <label className="radio">
+                <input type="radio" name={'status' + index}
+                       onChange={() => setStatus(index, ITEM_BARCODE_STATUS.ADDED)}/>
+                <b>{item.name} ({item.price} {receipt.currency_code})</b>
+              </label>
               <label>
-                <input type="radio" name={'status' + index} onChange={() => setStatus(index, ITEM_BARCODE_STATUS.ADDED)}/>
-                <b>{item.name}</b> ({item.price} {receipt.currency_code})
                 <input type="number" name={item.purchase_id} placeholder="12345678"
                        onChange={event => shopItems[index].barcode = event.target.value.trim()}
                        required={shopItems[index].status === ITEM_BARCODE_STATUS.ADDED}
                        disabled={shopItems[index].status !== ITEM_BARCODE_STATUS.ADDED}
                        className={shopItems[index].error ? 'alert' : ''}
                 />
-                {shopItems[index].error && <span className="alert">{shopItems[index].error}</span>}
               </label>
-              <label>
-                <input type="radio" name={'status' + index} onChange={() => setStatus(index, ITEM_BARCODE_STATUS.PENDING)}/>
+              {shopItems[index].error && <span className="alert">{shopItems[index].error}</span>}
+              <label className="radio">
+                <input type="radio" name={'status' + index}
+                       onChange={() => setStatus(index, ITEM_BARCODE_STATUS.PENDING)}/>
                 I don't have the barcode at hand
               </label>
-              <label>
-                <input type="radio" name={'status' + index} onChange={() => setStatus(index, ITEM_BARCODE_STATUS.MISSING)}/>
+              <label className="radio">
+                <input type="radio" name={'status' + index}
+                       onChange={() => setStatus(index, ITEM_BARCODE_STATUS.MISSING)}/>
                 Item doesn't have international barcode
               </label>
-              <label>
-                <input type="radio" name={'status' + index} onChange={() => setStatus(index, ITEM_BARCODE_STATUS.IRRELEVANT)}/>
+              <label className="radio">
+                <input type="radio" name={'status' + index}
+                       onChange={() => setStatus(index, ITEM_BARCODE_STATUS.IRRELEVANT)}/>
                 Item is irrelevant for the app
               </label>
               <br/>
@@ -324,7 +349,7 @@
 
     const pages = {
       home: <HomePage setPage={setPage} setMessage={setMessage} setReceipt={setReceipt}/>,
-      link_shop: <LinkShopPage setPage={setPage} setMessage={setMessage} receipt={receipt}/>,
+      link_shop: <LinkShopPage setPage={setPage} setMessage={setMessage} receipt={receipt} setReceipt={setReceipt}/>,
       add_barcodes: <AddBarcodesPage setPage={setPage} setMessage={setMessage} receipt={receipt}/>,
     };
     const pageTitles = {
