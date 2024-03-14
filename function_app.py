@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 import json
 
 from azure.functions import FunctionApp, AuthLevel, HttpRequest, HttpResponse
@@ -6,16 +8,12 @@ from src.handlers.add_barcodes import add_barcodes_handler
 from src.handlers.home import home_handler
 from src.handlers.link_shop import link_shop_handler
 from src.handlers.parse_from_url import parse_from_url_handler
+from src.helpers.common import get_template_path
 from src.helpers.logging import set_logger
 
 logger = set_logger()
 
 app = FunctionApp(http_auth_level=AuthLevel.ANONYMOUS)
-
-
-@app.route(route="home", methods=["GET"])
-def home(req: HttpRequest) -> HttpResponse:  # pylint: disable=unused-argument
-    return build_response(*home_handler(), mimetype="text/html")
 
 
 @app.route(route="parse-from-url", methods=["POST"])
@@ -41,6 +39,23 @@ def add_barcodes(req: HttpRequest) -> HttpResponse:
 
 def get_form_data(req: HttpRequest, *args: str) -> tuple[str, ...]:
     return tuple(req.form.get(val).strip() for val in args)
+
+
+@app.route(route="home", methods=["GET"])
+def home(req: HttpRequest) -> HttpResponse:  # pylint: disable=unused-argument
+    return build_response(*home_handler(), mimetype="text/html")
+
+
+@app.route(route="terms-of-service", methods=["GET"])
+def terms_of_service(req: HttpRequest) -> HttpResponse:  # pylint: disable=unused-argument
+    with open(get_template_path("tos-en.html"), "r", encoding="utf8") as file:
+        return build_response(HTTPStatus.OK, file.read(), mimetype="text/html")
+
+
+@app.route(route="privacy-policy", methods=["GET"])
+def privacy_policy(req: HttpRequest) -> HttpResponse:  # pylint: disable=unused-argument
+    with open(get_template_path("privacy-policy-en.html"), "r", encoding="utf8") as file:
+        return build_response(HTTPStatus.OK, file.read(), mimetype="text/html")
 
 
 def build_response(

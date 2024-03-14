@@ -16,9 +16,9 @@ We begin by addressing the more accessible digital receipts, before progressing 
 
 ## Deploying to Azure Functions
 1. Install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)
-2. `az login`
-3. `az --version`
-4. `func azure functionapp publish plante-receipt-parser`
+2. Verify Azure CLI was installed `az --version`
+3. `az login`
+4. Deploy app to prod `func azure functionapp publish plante-receipt-parser`
 
 
 ## Running tests
@@ -46,7 +46,7 @@ Run `python -m unittest discover -s src/tests/unit`
       - `TEST_COSMOS_DB_ACCOUNT_KEY={key}`
       - `TEST_COSMOS_DB_DATABASE_ID=PlanteTest`
       - `ENV_NAME=test`
-4. Run `python -m unittest discover -s src/tests/functional`
+3. Run `python -m unittest discover -s src/tests/functional`
 
 
 ## Architecture
@@ -59,5 +59,5 @@ but not at the expense of flexibility.
 
 
 ## Code style
-To check the code formatting, run `pylint src function_app.py`
+To check the code formatting, run `pylint src function_app.py`  
 To fix most of the formatting issues, run `black src function_app.py`

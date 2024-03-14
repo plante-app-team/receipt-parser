@@ -1,6 +1,16 @@
+import os
+
 from itertools import groupby
 
 import requests
+
+
+def get_templates_dir() -> str:
+    return os.path.join("src", "static", "templates")
+
+
+def get_template_path(template_name: str) -> str:
+    return os.path.join(get_templates_dir(), template_name)
 
 
 def split_list(lst, delimiter) -> list[list]:

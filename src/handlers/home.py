@@ -1,13 +1,13 @@
-import os
 from http import HTTPStatus
 
 from jinja2 import Environment, FileSystemLoader
 
+from src.helpers.common import get_templates_dir
 from src.schemas.common import ItemBarcodeStatus
 
 
 def home_handler() -> (HTTPStatus, str):
-    file_loader = FileSystemLoader(os.path.join("src", "static", "templates"))
+    file_loader = FileSystemLoader(get_templates_dir())
     jinja = Environment(loader=file_loader)
     data = {
         "route": {
